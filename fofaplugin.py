@@ -166,42 +166,44 @@ def get_partner_domain(domain):
 	runtime = 3
 
 	if check_website_status('http://fofa.so')['status'] == True:
+        	try:
+		# 发起查询请
+			payload = {'taskaction' : 'alldomains', 'domain' : domain}
+		    	content = http_request_post('http://fofa.so/lab/addtask/', payload)
+		    	taskinfo = content.text
+		    	jobId = json.loads(taskinfo)['jobId']
+		    	domian_jobInfo_url = 'http://fofa.so/lab/gettask?jobId=%s&t=%s' % (jobDNTId, int(time.time()))
+		    	partner_domain = []
 
-		# 发起查询请求
-		payload = {'taskaction' : 'alldomains', 'domain' : domain}
-		content = http_request_post('http://fofa.so/lab/addtask/', payload)
-		taskinfo = content.text
-		jobId = json.loads(taskinfo)['jobId']
-		domian_jobInfo_url = 'http://fofa.so/lab/gettask?jobId=%s&t=%s' % (jobDNTId, int(time.time()))
-		partner_domain = []
-
-		while True:
-			if timeout >= runtime:
-				partner_result = json.loads(http_request_get(domian_jobInfo_url)['html'])
-				if partner_result['finished']:
-					partner_domain = partner_result['msgs']
+		    	while True:
+			    	if timeout >= runtime:
+			    		partner_result = json.loads(http_request_get(domian_jobInfo_url)['html'])
+					if partner_result['finished']:
+						partner_domain = partner_result['msgs']
+						break
+					print 'searched %ss' % runtime
+					time.sleep(3)
+					runtime += 3
+				else:
+					print '<<<timeout>>>'
 					break
-				print 'searched %ss' % runtime
-				time.sleep(3)
-				runtime += 3
+
+			if len(partner_domain) > 0:
+				partner_domain.remove('start dumping...')
+				partner_domain.remove('<<<finished>>>')
+
+			if len(partner_domain) > 0:
+				partner_domain.append(domain)
+				result['partner'] = result.fromkeys(partner_domain)
+				for domainline in partner_domain:
+					get_sub_domain(domainline)
 			else:
-				print '<<<timeout>>>'
-				break
-
-		if len(partner_domain) > 0:
-			partner_domain.remove('start dumping...')
-			partner_domain.remove('<<<finished>>>')
-
-		if len(partner_domain) > 0:
-			partner_domain.append(domain)
-			result['partner'] = result.fromkeys(partner_domain)
-			for domainline in partner_domain:
-				get_sub_domain(domainline)
-		else:
-			# 没有兄弟域名，直接进入子域名查询
-			result['partner'] = {domain:None}
+				# 没有兄弟域名，直接进入子域名查询
+				result['partner'] = {domain:None}
+				get_sub_domain(domain)
+	       	except Exception, e:
+	       		result['partner'] = {domain:None}
 			get_sub_domain(domain)
-
 	else:
 		# print 'fofa is down'
 		result['partner'] = {domain:None}
