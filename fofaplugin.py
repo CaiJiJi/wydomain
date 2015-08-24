@@ -121,9 +121,16 @@ def http_request_post(url, payload, body_content_workflow=0):
 	# cookies = dict(scan_worker='working', cookies_be='wscan.net')
 	headers = {
 		'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20',
-		'Referer' : url,
-		'X-CSRF-Token': 'gq+Gnl4JMKKOhALUqNUwZmVBQvEPr7GwB83R26v4SRo=',
-		'Cookie': '_gat=1; request_method=GET; _fofa_session=WXprb0hwSjJQOHdSZHd6UDhQazkxdm02TUFqNDVyVGZMKzRmTUJPM2pJYTVhRnNqdDN4K1hmMmhwbVIwSnFRaWtSb0lrbEt1UHVJMkFaTWRyUytlWTJINEV0L0ZTWUVDUDdhSzBJeE4xeis1eUIyY3RCOGNjRlVhZENTaTNxdlNIQW4vVThycmhmOWg3ZXVBRDQ3Mkh0NUtRTFArcTdjUUNqNW9zc1dVUHVUby9pTjlpTWhwM2YrYjBGYUY1UndNbXNzOTk2ZFRrcmYrcWpPR2gremx0RVEwRHU2eld3bTZFemRrRGZOTUUzVmZHaEdaOS95bEYreG55VzVlMEJuRk9QdGVZZ1pTQjl2WGxSUHhyczVFS0lzWExGYldxNFBJRlNJTE1FL3VLa0Y1dVBxa01mNFdqdE9PVWptT2ZBV2ctLWNvSXdsVzJ1SThRVFNHTHI2a0pSV0E9PQ%3D%3D--4e6f0b38ea5068aa7425034c0e7c8992468f996d; _ga=GA1.2.263432433.1418114647',
+		'Referer' : 'http://fofa.so/lab/alldomains',
+		'Accept'  :  'application/json, text/javascript, */*; q=0.01',
+                'Accept-Encoding' : 'gzip, deflate',
+                'Accept-Language' : 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+                'Cache-Control' : 'no-cache',
+                'Connection'  :	'keep-alive',
+                'DNT' :	'1',
+                'X-Requested-With' : 'XMLHttpRequest',
+		'X-CSRF-Token': 'IWNwVrecVYJzs/tUmHjeQSZjiE7D9oPl1tm3UFmjFpHwk6wbh7xk62ukhbfJNkZdyspJ+ACVwjJlrMPFVwts9g==',
+		'Cookie': '_ga=GA1.2.312533498.1439994268; _fofa_session=SG5SK0d1SHpTNklUVk1zTVpud1JOeWVva0tNelVKY3FLUlVQUUhXZU5NTEx2RXVRcVB6MVN1dzZJRysyQVMwOUwxeVJWYWFYQXZqY0NKY2RtNms1QzRrQ3hybVdXa0NteEVvSkVxTWpyVWkzWFFyYkdQVnV1SUFmVkY1Sm5EV0hXN2NKZGUxSk8rT0k3MVBMbkdSSUppZjQyZzl1UlgvUzBBKys0S1JTaFpUTjM3U2htRmJQajV0MXM3ZnhOdWdwLS1GYTF1STZyUDRGQlpTQ1hEUENJMm1RPT0%3D--e2b988113f78caf830b502ff4a8c9188c1e96b44; _gat=1'
 		}
 	while True:
 		try:
@@ -165,7 +172,7 @@ def get_partner_domain(domain):
 		content = http_request_post('http://fofa.so/lab/addtask/', payload)
 		taskinfo = content.text
 		jobId = json.loads(taskinfo)['jobId']
-		domian_jobInfo_url = 'http://fofa.so/lab/gettask?jobId=%s&t=%s' % (jobId, int(time.time()))
+		domian_jobInfo_url = 'http://fofa.so/lab/gettask?jobId=%s&t=%s' % (jobDNTId, int(time.time()))
 		partner_domain = []
 
 		while True:
