@@ -50,6 +50,7 @@ import sys
 import random
 import requests
 import json
+import re
 
 # 动态配置项
 retrycnt = 3	# 重试次数
